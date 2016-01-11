@@ -1,8 +1,7 @@
 'use strict';
 
 describe('MovieCore', function() {
-  var PopularMovies;
-  var $httpBackend;
+  var PopularMovies, $httpBackend, starWars, expectedData;
 
   beforeEach(module('movieCore'));
 
@@ -17,13 +16,11 @@ describe('MovieCore', function() {
   });
 
   it('creates a popular movie', function() {
-    var starWars;
-
-    // var expectedData = function(data) {
-    //   dump(angular.mock.dump(data));
-    //   return angular.fromJson(data).movieId === 'tt0076759';
-    // };
-    var expectedData = {"movieId":"tt0076759","description": "Epic movie!"};
+    expectedData = function(data) {
+      dump(angular.mock.dump(data));
+      return angular.fromJson(data).movieId === 'tt0076759';
+    };
+    // var expectedData = {"movieId":"tt0076759","description": "Epic movie!"};
 
     $httpBackend.expect('POST', /./, expectedData)
       .respond(201);
@@ -35,10 +32,32 @@ describe('MovieCore', function() {
 
     starWars.$save();
 
-    // PopularMovies.save({
-    //   movieId: 'tt0076759',
-    //   description: 'Epic movie!'
-    // });
+    expect($httpBackend.flush).not.toThrow();
+  });
+
+  it('gets a movie', function() {
+    $httpBackend.expect('GET', 'popular/tt0076759')
+      .respond(200);
+
+    PopularMovies.get({ movieId: 'tt0076759' });
+
+    expect($httpBackend.flush).not.toThrow();
+  });
+
+  it('updates a movie', function() {
+    expectedData = function(data) {
+      dump(angular.mock.dump(data));
+      return angular.fromJson(data).description === 'AMAZING movie!';
+    };
+
+    $httpBackend.expect('PUT', 'popular', expectedData)
+      .respond(201);
+
+    starWars = new PopularMovies({
+      movieId: 'tt0076759',
+      description: 'AMAZING movie!'
+    });
+    starWars.$update();
 
     expect($httpBackend.flush).not.toThrow();
   });

@@ -6,7 +6,6 @@ angular
 
   function PopularMovies($resource) {
     return $resource('popular/:movieId', { movieId: '@id' }, {
-      update: { method: 'PUT' },
-      save: { method: 'POST' }
+      update: { method: 'PUT' }
     });
   }
