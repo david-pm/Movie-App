@@ -13,6 +13,8 @@ describe('MovieCore', function() {
   afterEach(function() {
     // throws an error if an unexpected request is made to $httpBackend
     $httpBackend.verifyNoOutstandingExpectation();
+    // throws an error if an expected request is not fulfilled
+    $httpBackend.verifyNoOutstandingRequest();
   });
 
   it('creates a popular movie', function() {
@@ -75,13 +77,14 @@ describe('MovieCore', function() {
     $httpBackend.flush();
   });
 
-  xit('authenticates requests', function() {
+  it('authenticates requests', function() {
     var headerData = function(headers) {
         return headers.authToken === 'mylittlepony';
     }
     var matchAny = /.*/;
     var popularMovie = {movieId: 'tt0076759',description: 'AMAZING movie!'};
 
+    // since there are two GET requests used in this test we do whenGET
     $httpBackend.whenGET(matchAny, headerData)
       .respond(200);
     $httpBackend.expectPOST(matchAny, matchAny, headerData)
@@ -97,6 +100,7 @@ describe('MovieCore', function() {
     new PopularMovies(popularMovie).$update();
     new PopularMovies(popularMovie).$remove();
 
+    // $httpBackend.flush(4); // fails due to verifyNoOutstandingRequest()
     expect($httpBackend.flush).not.toThrow();
   });
 
