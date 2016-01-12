@@ -16,18 +16,15 @@ describe('MovieCore', function() {
   });
 
   it('creates a popular movie', function() {
-    expectedData = function(data) {
-      dump(angular.mock.dump(data));
-      return angular.fromJson(data).movieId === 'tt0076759';
-    };
     // var expectedData = {"movieId":"tt0076759","description": "Epic movie!"};
+    expectedData = /{"movieId":"tt0076759","description":(.*)}/;
 
     $httpBackend.expect('POST', /./, expectedData)
       .respond(201);
 
     starWars = new PopularMovies({
       movieId: 'tt0076759',
-      description: 'Epic movie!'
+      description: 'Good times'
     });
 
     starWars.$save();
@@ -36,8 +33,11 @@ describe('MovieCore', function() {
   });
 
   it('gets a movie', function() {
-    $httpBackend.expect('GET', 'popular/tt0076759')
-      .respond(200);
+    $httpBackend.expect('GET', function(url) {
+      dump(url);
+      return url === 'popular/tt0076759';
+    }).respond(200);
+    // $httpBackend.expect('GET', 'popular/tt0076759').respond(200);
 
     PopularMovies.get({ movieId: 'tt0076759' });
 
