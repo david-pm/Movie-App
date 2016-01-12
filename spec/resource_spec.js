@@ -1,7 +1,7 @@
 'use strict';
 
 describe('MovieCore', function() {
-  var PopularMovies, $httpBackend, starWars, expectedData;
+  var PopularMovies, $httpBackend, starWars, expectedData, expectedHeaders;
 
   beforeEach(module('movieCore'));
 
@@ -58,6 +58,44 @@ describe('MovieCore', function() {
       description: 'AMAZING movie!'
     });
     starWars.$update();
+
+    expect($httpBackend.flush).not.toThrow();
+  });
+
+  it('authenticates requests', function() {
+    expectedHeaders = {"authToken":"mylittlepony","Accept":"application/json, text/plain, */*"};
+
+    // $httpBackend.expectGET('popular/tt0076759', function(headers) {
+    $httpBackend.expect('GET', 'popular/tt0076759', null, function(headers) {
+      dump(headers);
+      return angular.fromJson(headers).authToken  === headers.authToken;
+    }).respond(200);
+
+    PopularMovies.get({ movieId: 'tt0076759' });
+    $httpBackend.flush();
+  });
+
+  xit('authenticates requests', function() {
+    var headerData = function(headers) {
+        return headers.authToken === 'mylittlepony';
+    }
+    var matchAny = /.*/;
+    var popularMovie = {movieId: 'tt0076759',description: 'AMAZING movie!'};
+
+    $httpBackend.whenGET(matchAny, headerData)
+      .respond(200);
+    $httpBackend.expectPOST(matchAny, matchAny, headerData)
+      .respond(200);
+    $httpBackend.expectPUT(matchAny, matchAny, headerData)
+      .respond(200);
+    $httpBackend.expectDELETE(matchAny, headerData)
+      .respond(200);
+
+    PopularMovies.query();
+    PopularMovies.get({ movieId: 'tt0076759' });
+    new PopularMovies(popularMovie).$save();
+    new PopularMovies(popularMovie).$update();
+    new PopularMovies(popularMovie).$remove();
 
     expect($httpBackend.flush).not.toThrow();
   });
