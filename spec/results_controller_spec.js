@@ -1,5 +1,5 @@
 describe('Results Controller', function() {
-  var $controller, $scope, $rootScope, $q, omdbApi;
+  var $controller, $scope, $rootScope, $q, $location, omdbApi;
   var results = {
     "Search": [
       {
@@ -28,11 +28,12 @@ describe('Results Controller', function() {
   beforeEach(module('omdb'));
   beforeEach(module('movieApp'));
 
-  beforeEach(inject(function(_$controller_, _$rootScope_, _$q_, _omdbApi_) {
+  beforeEach(inject(function(_$controller_, _$rootScope_, _$q_, _$location_, _omdbApi_) {
     $controller = _$controller_;
     $scope = {};
     $rootScope = _$rootScope_;
     $q = _$q_;
+    $location = _$location_;
     omdbApi = _omdbApi_;
   }));
 
@@ -41,12 +42,33 @@ describe('Results Controller', function() {
       var deferred = $q.defer();
       deferred.resolve(results);
       return deferred.promise;
-    })
+    });
+    $location.search('q', 'star wars');
     $controller('ResultsController', { $scope: $scope });
-    $rootScope.$apply();
+    $rootScope.$apply(); // promises are usually resolved by a digest cycle in the browser,
+                         // we have to manually trigger a digest cycle to actually resolve
+                         // our promises. this allows .then() to be called in the ctrl
     expect($scope.results[0].Title).toBe(results.Search[0].Title);
     expect($scope.results[1].Title).toBe(results.Search[1].Title);
     expect($scope.results[2].Title).toBe(results.Search[2].Title);
+    expect(omdbApi.search).toHaveBeenCalledWith('star wars');
+  });
+
+  it('sets result status to error', function() {
+    spyOn(omdbApi, 'search').and.callFake(function() {
+      var deferred = $q.defer();
+      deferred.reject();
+      return deferred.promise;
+    });
+    $location.search('q', 'star wars');
+    $controller('ResultsController', { $scope: $scope });
+    $rootScope.$apply();
+    expect($scope.errorMessage).toBe("Something went wrong!");
   });
 
 });
+
+/* BREAKDOWN
+
+
+END */
