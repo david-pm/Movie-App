@@ -57,48 +57,48 @@
 // });
 
 /* INTEGRATE - with app */
-// describe('Search Ctrl', function() {
-//   var $scope, $location;
-//
-//   beforeEach(module('movieApp'));
-//   beforeEach(inject(function(_$controller_, _$location_, $rootScope) {
-//     $location = _$location_;
-//     $scope = $rootScope.$new();
-//     _$controller_('SearchController', { $scope: $scope });
-//   }));
-//
-//   it('redirect to the query results page for a non-empty query', function() {
-//     $scope.query = 'star wars';
-//     $scope.search();
-//     expect($location.url()).toBe('/results?q=star%20wars');
-//   });
-//
-//   it('does NOT redirect to the query results page for an empty query', function() {
-//     $scope.query = '';
-//     $scope.search();
-//     expect($location.url()).toBe('');
-//   });
-// });
-
-/* THIS - binding */
 describe('Search Ctrl', function() {
-  var $this, $location, $controller;
+  var $scope, $location;
 
   beforeEach(module('movieApp'));
-  beforeEach(inject(function(_$controller_, _$location_) {
+  beforeEach(inject(function(_$controller_, _$location_, $rootScope) {
     $location = _$location_;
-    $controller = _$controller_;
+    $scope = $rootScope.$new();
+    _$controller_('SearchController', { $scope: $scope });
   }));
 
   it('redirect to the query results page for a non-empty query', function() {
-    $this = $controller('SearchController', { $location: $location }, { query: 'star wars' });
-    $this.search();
+    $scope.query = 'star wars';
+    $scope.search();
     expect($location.url()).toBe('/results?q=star%20wars');
   });
 
   it('does NOT redirect to the query results page for an empty query', function() {
-    $this = $controller('SearchController', { $location: $location }, { query: '' });
-    $this.search();
+    $scope.query = '';
+    $scope.search();
     expect($location.url()).toBe('');
   });
 });
+
+/* THIS - binding */
+// describe('Search Ctrl', function() {
+//   var $this, $location, $controller;
+//
+//   beforeEach(module('movieApp'));
+//   beforeEach(inject(function(_$controller_, _$location_) {
+//     $location = _$location_;
+//     $controller = _$controller_;
+//   }));
+//
+//   it('redirect to the query results page for a non-empty query', function() {
+//     $this = $controller('SearchController', { $location: $location }, { query: 'star wars' });
+//     $this.search();
+//     expect($location.url()).toBe('/results?q=star%20wars');
+//   });
+//
+//   it('does NOT redirect to the query results page for an empty query', function() {
+//     $this = $controller('SearchController', { $location: $location }, { query: '' });
+//     $this.search();
+//     expect($location.url()).toBe('');
+//   });
+// });
