@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="movieApp">
   <head>
     <meta charset="utf-8">
     <title>Movie App</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
     <style media="screen">
       .container { max-width: 900px; }
     </style>
@@ -17,11 +18,21 @@
             Your resource for Movie info.
           </p>
         </div>
+        <div ng-controller="SearchController">
+          <form class="form-inline-lg" ng-submit="search()">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="film title..." ng-model="query">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" name="button" ng-click="search()">Go! </button>
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
     </header>
 
     <div class="container">
-      <div class="">
+      <div ng-view="">
 
       </div>
     </div>
@@ -34,8 +45,16 @@
       </div>
     </footer>
 
-    <script src='angular.js'></script>
-    <script src='angular-resource.js'></script>
+    <script src='angular/angular.min.js'></script>
+    <script src='angular-route/angular-route.min.js'></script>
+    <script src='angular-resource/angular-resource.min.js'></script>
+    <script src='angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
+
+    <script src="movie-app/app.js"></script>
+    <script src="omdb/omdb_service.js"></script>
+    <script src="omdb/omdb_resource.js"></script>
+    <script src="movie-core/search_controller.js"></script>
+    <script src="movie-core/results_controller.js"></script>
 
   </body>
 </html>
