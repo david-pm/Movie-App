@@ -14,5 +14,10 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~1.0.3",
+    "angular-resource": "~1.4.8",
+    "angular-mocks": "~1.4.8"
+  }
 }
