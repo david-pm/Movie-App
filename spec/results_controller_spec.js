@@ -43,7 +43,7 @@ describe('Results Controller', function() {
       deferred.resolve(results);
       return deferred.promise;
     });
-    $location.search('q', 'star wars');
+    $location.search('q', 'star wars'); // set q to 'star wars' {q: 'star wars'}
     $controller('ResultsController', { $scope: $scope });
     $rootScope.$apply(); // promises are usually resolved by a digest cycle in the browser,
                          // we have to manually trigger a digest cycle to actually resolve
@@ -70,5 +70,38 @@ describe('Results Controller', function() {
 
 /* BREAKDOWN
 
+  // get the modules we need and inject $controller, $rootScope, $q, and whatever service(s)
+  // we will need to mock up
+
+  beforeEach(module('omdb'));
+  beforeEach(module('movieApp'));
+  beforeEach(inject(function(_$controller_, _$rootScope_, _$q_, _$location_, _omdbApi_) { ...
+
+  // use a spy and callFake on our service method under test. use the $q service
+  // for mocking up promises so we can return appropriate responses to our controller
+  // note here, that we are rejecting the promise so it will error out
+
+  spyOn(omdbApi, 'search').and.callFake(function() {
+    var deferred = $q.defer();
+    deferred.reject();
+    return deferred.promise;
+  });
+
+  // the arg that is passed into omdbApi.search(query) is set via $location.search().q
+  // so we use the setter syntax here
+
+  $location.search('q', 'star wars');
+
+  // initialize our controller and setup its scope before we trigger a digest
+
+  $controller('ResultsController', { $scope: $scope });
+
+  // trigger a digest cycle to resolve our deferred promise
+
+  $rootScope.$apply();
+
+  // assert
+
+  expect($scope.errorMessage).toBe("Something went wrong!");
 
 END */
