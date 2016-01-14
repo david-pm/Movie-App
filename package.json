@@ -1,7 +1,8 @@
 {
-  "name": "jasmine-karma-ngmocks",
+  "name": "movie-app",
   "version": "0.0.1",
-  "description": "jasmine-karma-ngmocks for tdd with angularjs",
+  "description": "movie app for tdd with angularjs",
+  "respository": "https://github.com/david-pm/Movie-App.git",
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },

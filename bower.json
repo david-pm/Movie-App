@@ -1,13 +1,13 @@
 {
-  "name": "jasmine-karma-ngmocks",
-  "description": "jasmine-karma-ngmocks for tdd with angularjs",
+  "name": "movie-app",
+  "description": "movie app for tdd with angularjs",
   "main": "index.js",
+  "respository": "https://github.com/david-pm/Movie-App.git",
   "authors": [
     "David McDonald <dmcdonald@sellbrite.com>"
   ],
   "license": "MIT",
   "moduleType": [],
-  "homepage": "",
   "ignore": [
     "**/.*",
     "node_modules",
