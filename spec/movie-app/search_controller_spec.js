@@ -57,28 +57,28 @@
 // });
 
 /* INTEGRATE - with app */
-describe('Search Ctrl', function() {
-  var $scope, $location;
-
-  beforeEach(module('movieApp'));
-  beforeEach(inject(function(_$controller_, _$location_, $rootScope) {
-    $location = _$location_;
-    $scope = $rootScope.$new();
-    _$controller_('SearchController', { $scope: $scope });
-  }));
-
-  it('redirect to the query results page for a non-empty query', function() {
-    $scope.query = 'star wars';
-    $scope.search();
-    expect($location.url()).toBe('/results?q=star%20wars');
-  });
-
-  it('does NOT redirect to the query results page for an empty query', function() {
-    $scope.query = '';
-    $scope.search();
-    expect($location.url()).toBe('');
-  });
-});
+// describe('Search Ctrl', function() {
+//   var $scope, $location;
+//
+//   beforeEach(module('movieApp'));
+//   beforeEach(inject(function(_$controller_, _$location_, $rootScope) {
+//     $location = _$location_;
+//     $scope = $rootScope.$new();
+//     _$controller_('SearchController', { $scope: $scope });
+//   }));
+//
+//   it('redirect to the query results page for a non-empty query', function() {
+//     $scope.query = 'star wars';
+//     $scope.search();
+//     expect($location.url()).toBe('/results?q=star%20wars');
+//   });
+//
+//   it('does NOT redirect to the query results page for an empty query', function() {
+//     $scope.query = '';
+//     $scope.search();
+//     expect($location.url()).toBe('');
+//   });
+// });
 
 /* THIS - binding */
 // describe('Search Ctrl', function() {
@@ -102,3 +102,51 @@ describe('Search Ctrl', function() {
 //     expect($location.url()).toBe('');
 //   });
 // });
+
+
+describe('Search Ctrl', function() {
+  var $scope, $location, $timeout;
+
+  beforeEach(module('movieApp'));
+  beforeEach(inject(function(_$controller_, _$location_, _$timeout_, $rootScope) {
+    $scope = $rootScope.$new();
+    $location = _$location_;
+    $timeout = _$timeout_;
+    _$controller_('SearchController', { $scope: $scope });
+  }));
+
+  it('redirect to the query results page for a non-empty query', function() {
+    $scope.query = 'star wars';
+    $scope.search();
+    expect($location.url()).toBe('/results?q=star%20wars');
+  });
+
+  it('does NOT redirect to the query results page for an empty query', function() {
+    $scope.query = '';
+    $scope.search();
+    expect($location.url()).toBe('');
+  });
+
+  it('searches after one second of inactivity', function() {
+    $scope.query = 'star wars';
+    $scope.keyup();
+    $timeout.flush();
+    expect($timeout.verifyNoPendingTasks).not.toThrow();
+    expect($location.url()).toBe('/results?q=star%20wars');
+  });
+
+  it('cancels timeout on keydown', function() {
+    $scope.query = 'star wars';
+    $scope.keyup();
+    $scope.keydown();
+    expect($timeout.verifyNoPendingTasks).not.toThrow();
+  });
+
+  it('cancels timeout on search', function() {
+    $scope.query = 'star wars';
+    $scope.keyup();
+    $scope.search();
+    expect($timeout.verifyNoPendingTasks).not.toThrow();
+  });
+
+});
