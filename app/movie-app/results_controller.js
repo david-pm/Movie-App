@@ -16,12 +16,24 @@ angular
         $exceptionHandler(error);
       });
 
-    $scope.expand = function expand(index, id) {
+    function findMovie(index, id) {
       omdbApi.find(id)
         .then(function(data) {
           $scope.results[index].data = data;
           $scope.results[index].open = true;
         });
     }
+
+    $scope.expandOrClose = function expandOrClose(index, id) {
+      if ($scope.results[index].data) {
+        if ($scope.results[index].data.imdbID !== id) {
+          $scope.results[index].open = false;
+        } else {
+          findMovie(index, id);
+        }
+      } else {
+        findMovie(index, id);
+      } // else
+    } // extend
 
   }

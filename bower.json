@@ -20,6 +20,7 @@
     "angular-resource": "~1.4.8",
     "angular-mocks": "~1.4.8",
     "bootstrap": "~3.3.6",
-    "angular-route": "~1.4.8"
+    "angular-route": "~1.4.8",
+    "flat-ui": "~2.2.2"
   }
 }
