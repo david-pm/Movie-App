@@ -1,8 +1,8 @@
 angular
   .module('movieApp')
-  .controller('ResultsController', ['$scope', '$location', 'omdbApi', ResultsController]);
+  .controller('ResultsController', ['$scope', '$location', '$exceptionHandler', 'omdbApi', ResultsController]);
 
-  function ResultsController($scope, $location, omdbApi) {
+  function ResultsController($scope, $location, $exceptionHandler, omdbApi) {
     var query = $location.search().q;
     $scope.results = [];
 
@@ -11,7 +11,15 @@ angular
         $scope.results = data.Search;
       })
       .catch(function(error) {
-        $scope.errorMessage = "Something went wrong!";
+        $exceptionHandler(error);
       });
+
+    $scope.expand = function expand(index, id) {
+      omdbApi.find(id)
+        .then(function(data) {
+          $scope.results[index].data = data;
+          $scope.results[index].open = true;
+        });
+    }
 
   }
