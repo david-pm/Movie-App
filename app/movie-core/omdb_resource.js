@@ -2,10 +2,10 @@
 
 angular
   .module('movieCore', ['ngResource'])
-  .factory('PopularMovies', ['$resource', PopularMovies]); // min safe
+  .factory('PopularMovies', ['$resource', PopularMovies]);
 
   function PopularMovies($resource) {
-    var token = 'mylittlepony'; //TBC
+    var token = 'mylittlepony'; // TBC
     return $resource('popular/:movieId', { movieId: '@id' }, {
       update: {
         method: 'PUT',
@@ -13,6 +13,7 @@ angular
       },
       query: {
         method: 'GET',
+        isArray: true,
         headers: { 'authToken': token }
       },
       get: {
