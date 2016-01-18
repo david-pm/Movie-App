@@ -15,23 +15,12 @@ angular
         });
     }
 
-    // PopularMovies.get(function(data) {
-    //     result = data;
-    //     findMovie(result[0]);
-    //     $interval(function() {
-    //       ++index;
-    //       findMovie(result[index % result.length]);
-    //     }, 5000);
-    //   });
-
-    PopularMovies.get()
-      .then(function(data) {
-    // var data = ["tt0076759", "tt0080684", "tt0086190"];
-        results = data;
-        findMovie(results[0]);
+    PopularMovies.query(function(data) {
+        result = data;
+        findMovie(result[0]);
         $interval(function() {
           ++index;
-          findMovie(results[index % results.length]);
+          findMovie(result[index % result.length]);
         }, 5000);
       });
 

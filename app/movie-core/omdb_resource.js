@@ -13,11 +13,11 @@ angular
       },
       query: {
         method: 'GET',
+        isArray: true,
         headers: { 'authToken': token }
       },
       get: {
         method: 'GET',
-        isArray: true,
         headers: { 'authToken': token }
       },
       save: {
