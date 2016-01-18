@@ -37,6 +37,8 @@ describe('Movie Result Directive', function() {
     element = $compile('<movie-result result="result"></movie-result>')($rootScope);
     $rootScope.$digest();
     expect(element.html()).toBe(expectedHtml);
+    expect($rootScope.$countChildScopes()).toBe(1);
+    expect($rootScope.$countWatchers()).toBe(9);
   });
 
 });
