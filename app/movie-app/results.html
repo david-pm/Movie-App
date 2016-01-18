@@ -6,7 +6,7 @@
   </ol>
 
   <uib-accordion>
-    <uib-accordion-group ng-repeat="result in results" is-open="result.open" ng-click="expand($index, result.imdbID)">
+    <uib-accordion-group ng-repeat="result in results" is-open="result.open" ng-click="expandOrClose($index, result.imdbID)">
       <uib-accordion-heading>
         {{result.Title}}
         <i class="pull-right glyphicon"
