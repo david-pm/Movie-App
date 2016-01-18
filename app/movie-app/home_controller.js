@@ -4,7 +4,7 @@ angular
 
   function HomeController($scope, $interval, omdbApi, $exceptionHandler, PopularMovies) {
     var index = 0;
-    var results = [];
+    var result = [];
     var findMovie = function(id) {
       omdbApi.find(id)
         .then(function(data) {
@@ -14,6 +14,15 @@ angular
           $exceptionHandler(error);
         });
     }
+
+    // PopularMovies.get(function(data) {
+    //     result = data;
+    //     findMovie(result[0]);
+    //     $interval(function() {
+    //       ++index;
+    //       findMovie(result[index % result.length]);
+    //     }, 5000);
+    //   });
 
     PopularMovies.get()
       .then(function(data) {

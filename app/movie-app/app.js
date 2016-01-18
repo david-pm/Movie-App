@@ -13,4 +13,7 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  })
+  .config(function($logProvider) {
+    $logProvider.debugEnabled(false); // can override this in specs
   });

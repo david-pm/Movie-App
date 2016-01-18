@@ -109,7 +109,7 @@ END */
 
 // $exceptionHandler
 describe('Results Controller', function() {
-  var $controller, $scope, $rootScope, $q, $location, $exceptionHandler, omdbApi;
+  var $controller, $scope, $rootScope, $q, $location, $exceptionHandler, $log, omdbApi;
   var results = {
     "Search": [
       {
@@ -137,15 +137,17 @@ describe('Results Controller', function() {
 
   beforeEach(module('omdb'));
   beforeEach(module('movieApp'));
-  beforeEach(module(function($exceptionHandlerProvider) {
+  beforeEach(module(function($exceptionHandlerProvider, $logProvider) {
+    $logProvider.debugEnabled(true); // override app config setting
     $exceptionHandlerProvider.mode('log');
   }));
-  beforeEach(inject(function(_$controller_, _$rootScope_, _$q_, _$location_, _omdbApi_, _$exceptionHandler_) {
+  beforeEach(inject(function(_$controller_, _$rootScope_, _$q_, _$location_, _$log_, _omdbApi_, _$exceptionHandler_) {
     $controller = _$controller_;
     $scope = {};
     $rootScope = _$rootScope_;
     $q = _$q_;
     $location = _$location_;
+    $log = _$log_;
     $exceptionHandler = _$exceptionHandler_;
     omdbApi = _omdbApi_;
   }));
@@ -164,6 +166,8 @@ describe('Results Controller', function() {
     expect($scope.results[1].Title).toBe(results.Search[1].Title);
     expect($scope.results[2].Title).toBe(results.Search[2].Title);
     expect(omdbApi.search).toHaveBeenCalledWith('star wars');
+    expect($log.debug.logs[0]).toEqual(['Controller loaded with query: ', 'star wars']);
+    expect($log.debug.logs[1]).toEqual(['Data returned for query: ', 'star wars', results]);
   });
 
   it('sets result status to error', function() {

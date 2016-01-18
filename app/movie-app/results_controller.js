@@ -1,13 +1,15 @@
 angular
   .module('movieApp')
-  .controller('ResultsController', ['$scope', '$location', '$exceptionHandler', 'omdbApi', ResultsController]);
+  .controller('ResultsController', ['$scope', '$location', '$exceptionHandler', '$log', 'omdbApi', ResultsController]);
 
-  function ResultsController($scope, $location, $exceptionHandler, omdbApi) {
+  function ResultsController($scope, $location, $exceptionHandler, $log, omdbApi) {
     var query = $location.search().q;
+    $log.debug('Controller loaded with query: ', query);
     $scope.results = [];
 
     omdbApi.search(query)
       .then(function(data) {
+        $log.debug('Data returned for query: ', query, data);
         $scope.results = data.Search;
       })
       .catch(function(error) {
